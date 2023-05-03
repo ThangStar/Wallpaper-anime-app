@@ -60,8 +60,8 @@ import com.example.wallpaper_anime_app.ui.theme.Wallpaper_anime_appTheme
 @Composable
 fun DetailScreenScroll(
     paddingValue: PaddingValues = PaddingValues(horizontal = 16.dp),
-    name: String = "Neko",
     detailViewModel: DetailViewModel,
+    nameArgument: String? = "name"
 ) {
     Column(
         modifier = Modifier.background(
@@ -75,7 +75,7 @@ fun DetailScreenScroll(
         Spacer(modifier = Modifier.height(34.dp))
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = name,
+            text = nameArgument!!,
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold)
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -114,9 +114,10 @@ fun DetailScreenScroll(
 fun DetailScreen(
     name: String = "Neko",
     detailViewModel: DetailViewModel = hiltViewModel(),
+    nameArgument: String? = "name",
 ) {
     Scaffold(content = { paddingValue ->
-        DetailScreenScroll(paddingValue, detailViewModel = detailViewModel)
+        DetailScreenScroll(paddingValue, detailViewModel = detailViewModel, nameArgument = nameArgument)
     })
 }
 

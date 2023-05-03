@@ -1,5 +1,6 @@
 package com.example.wallpaper_anime_app.ui.model
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallpaper_anime_app.network.domain.AnimeItem
@@ -15,9 +16,12 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val apiHelper: APIHelper,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private var _listDetailItem = MutableStateFlow<List<AnimeItem>>(emptyList())
     val listDetailItem = _listDetailItem
+
+    private val nameArgument = checkNotNull(savedStateHandle["name"])
 
     init {
         getData()
@@ -27,7 +31,7 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
 
-                val flowData = apiHelper.getAllDetailItem("neko", 16)
+                val flowData = apiHelper.getAllDetailItem("$nameArgument", 16)
                 flowData.collect { it: ResultsAnimeItemResponse ->
                     _listDetailItem.value += it.listDetailResponse
                 }

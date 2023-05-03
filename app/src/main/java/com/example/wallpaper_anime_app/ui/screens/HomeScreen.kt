@@ -2,8 +2,6 @@
 
 package com.example.wallpaper_anime_app.ui.screens
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,18 +21,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
@@ -45,17 +39,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.wallpaper_anime_app.R
 import com.example.wallpaper_anime_app.network.domain.AnimeItem
 import com.example.wallpaper_anime_app.ui.components.MySearchBar
-import com.example.wallpaper_anime_app.ui.model.HomeViewModel
 import com.example.wallpaper_anime_app.ui.navigation.NavScreens
 import com.example.wallpaper_anime_app.ui.theme.BgGradianBettwent
 import com.example.wallpaper_anime_app.ui.theme.BgGradianEnd
@@ -68,9 +58,13 @@ import com.example.wallpaper_anime_app.ui.theme.White900
 fun HomeScreen(
     paddingValues: PaddingValues = PaddingValues(horizontal = 16.dp),
     navController: NavController,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    listPopular: List<AnimeItem> = listOf(
+        AnimeItem(anime_name = "name", url = "url.jpg", null, null, "name"),
+        AnimeItem(anime_name = "name", url = "url.jpg", null, null, "name"),
+        AnimeItem(anime_name = "name", url = "url.jpg", null, null, "name"),
+        AnimeItem(anime_name = "name", url = "url.jpg", null, null, "name"),
+    ),
 ) {
-    val listPopular by homeViewModel.manyPopular.collectAsState(initial = emptyList())
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
@@ -155,7 +149,7 @@ fun CardItemPopular(
         Card(
             shape = RoundedCornerShape(12.dp),
             onClick = {
-                navController.navigate(NavScreens.DetailScreen.route)
+                navController.navigate(NavScreens.DetailScreen.route+"/"+animeItem.nameRoute)
             }
         ) {
             AsyncImage(
@@ -192,7 +186,7 @@ fun OtherCategory(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.clickable {
-                navController.navigate(NavScreens.DetailScreen.route)
+                navController.navigate(NavScreens.DetailScreen.route+"/"+animeItem.nameRoute)
             }
         ) {
             AsyncImage(

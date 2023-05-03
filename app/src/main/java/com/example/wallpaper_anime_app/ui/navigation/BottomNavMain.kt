@@ -18,6 +18,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
@@ -34,6 +36,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.wallpaper_anime_app.ui.model.HomeViewModel
 import com.example.wallpaper_anime_app.ui.screens.DetailScreen
 import com.example.wallpaper_anime_app.ui.screens.HomeScreen
 
@@ -86,7 +89,9 @@ fun BottomNavMain(
             modifier = Modifier.padding(paddingValue)
         ) {
             composable(BottomNavScreen.HomeScreen.route) {
-                HomeScreen(navController = navController)
+                val homeViewModel: HomeViewModel = hiltViewModel()
+                val listPopular by homeViewModel.manyPopular.collectAsState(initial = emptyList())
+                HomeScreen(navController = navController, listPopular = listPopular)
             }
             composable(BottomNavScreen.ProfileScreen.route) {
                 HomeScreen(navController = navController)
