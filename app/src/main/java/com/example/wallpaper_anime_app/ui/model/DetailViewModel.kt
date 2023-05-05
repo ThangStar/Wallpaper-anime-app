@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val apiHelper: APIHelper,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private var _listDetailItem = MutableStateFlow<List<AnimeItem>>(emptyList())
     val listDetailItem = _listDetailItem
@@ -30,7 +30,6 @@ class DetailViewModel @Inject constructor(
     private fun getData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-
                 val flowData = apiHelper.getAllDetailItem("$nameArgument", 16)
                 flowData.collect { it: ResultsAnimeItemResponse ->
                     _listDetailItem.value += it.listDetailResponse

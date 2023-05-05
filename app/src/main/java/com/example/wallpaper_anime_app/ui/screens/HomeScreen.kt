@@ -2,6 +2,7 @@
 
 package com.example.wallpaper_anime_app.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,8 +21,10 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,6 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.wallpaper_anime_app.R
 import com.example.wallpaper_anime_app.network.domain.AnimeItem
@@ -148,22 +153,38 @@ fun CardItemPopular(
     ) {
         Card(
             shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .size(width = 112.dp, height = 186.dp),
             onClick = {
-                navController.navigate(NavScreens.DetailScreen.route+"/"+animeItem.nameRoute)
-            }
+                navController.navigate(NavScreens.DetailScreen.route + "/" + animeItem.nameRoute)
+            },
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
+
+            val imagePainter = rememberAsyncImagePainter(
+                model =
+                ImageRequest.Builder(LocalContext.current)
                     .data(animeItem.url)
+                    .size(coil.size.Size.ORIGINAL)
                     .crossfade(true)
-                    .build(),
+                    .build()
+            )
+            val state = imagePainter.state
+
+            AnimatedVisibility(visible = state is AsyncImagePainter.State.Loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .progressSemantics()
+                        .size(64.dp)
+                )
+            }
+
+            AsyncImage(
+                model = imagePainter.request,
                 contentDescription = animeItem.anime_name,
-                modifier = Modifier
-                    .size(width = 112.dp, height = 186.dp),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.baka_loading),
-
-                )
+                modifier = Modifier.fillMaxSize()
+            )
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -186,7 +207,7 @@ fun OtherCategory(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.clickable {
-                navController.navigate(NavScreens.DetailScreen.route+"/"+animeItem.nameRoute)
+                navController.navigate(NavScreens.DetailScreen.route + "/" + animeItem.nameRoute)
             }
         ) {
             AsyncImage(
