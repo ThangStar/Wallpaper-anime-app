@@ -2,29 +2,25 @@
 
 package com.example.wallpaper_anime_app.ui.screens
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.progressSemantics
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -33,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -45,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.wallpaper_anime_app.R
@@ -56,7 +52,6 @@ import com.example.wallpaper_anime_app.ui.theme.BgGradianBettwent
 import com.example.wallpaper_anime_app.ui.theme.BgGradianEnd
 import com.example.wallpaper_anime_app.ui.theme.BgGradianStart
 import com.example.wallpaper_anime_app.ui.theme.Wallpaper_anime_appTheme
-import com.example.wallpaper_anime_app.ui.theme.White900
 
 
 @Composable
@@ -64,13 +59,13 @@ fun HomeScreen(
     paddingValues: PaddingValues = PaddingValues(horizontal = 16.dp),
     navController: NavController,
     listPopular: List<AnimeItem> = listOf(
-        AnimeItem(anime_name = "name", url = "url.jpg", null, null, "name"),
-        AnimeItem(anime_name = "name", url = "url.jpg", null, null, "name"),
-        AnimeItem(anime_name = "name", url = "url.jpg", null, null, "name"),
-        AnimeItem(anime_name = "name", url = "url.jpg", null, null, "name"),
+        AnimeItem(animeName = "name", url = "url.jpg", null, null, "name"),
+        AnimeItem(animeName = "name", url = "url.jpg", null, null, "name"),
+        AnimeItem(animeName = "name", url = "url.jpg", null, null, "name"),
+        AnimeItem(animeName = "name", url = "url.jpg", null, null, "name"),
     ),
 ) {
-    LazyVerticalGrid(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -82,14 +77,10 @@ fun HomeScreen(
                     )
                 )
             ),
-        columns = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        item(span = {
-            GridItemSpan(maxCurrentLineSpan)
-        }) {
-            Column() {
+        item {
+            Column {
                 Spacer(modifier = Modifier.height(42.dp))
                 MySearchBar(
                     modifier = Modifier
@@ -112,18 +103,10 @@ fun HomeScreen(
                 )
             }
         }
-        itemsIndexed(listPopular) { i, it ->
-            Box(
-                modifier =
-                if (i % 2 == 0) Modifier.padding(start = 16.dp) else Modifier.padding(end = 16.dp)
-            ) {
-                OtherCategory(navController = navController, it)
-            }
+        items(listPopular) { it ->
+            OtherCategory(navController = navController, it)
         }
         item(
-            span = {
-                GridItemSpan(3)
-            }
         ) {
             Spacer(modifier = Modifier.height(42.dp))
         }
@@ -142,10 +125,10 @@ fun ListCardItemPopular(listPopular: List<AnimeItem>, navController: NavControll
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardItemPopular(
     navController: NavController,
-
     animeItem: AnimeItem,
 ) {
     Column(
@@ -153,37 +136,23 @@ fun CardItemPopular(
     ) {
         Card(
             shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .size(width = 112.dp, height = 186.dp),
+            modifier = Modifier.size(width = 112.dp, height = 186.dp),
             onClick = {
                 navController.navigate(NavScreens.DetailScreen.route + "/" + animeItem.nameRoute)
             },
         ) {
 
             val imagePainter = rememberAsyncImagePainter(
-                model =
-                ImageRequest.Builder(LocalContext.current)
-                    .data(animeItem.url)
-                    .size(coil.size.Size.ORIGINAL)
-                    .crossfade(true)
-                    .build()
+                model = ImageRequest.Builder(LocalContext.current).data(animeItem.url)
+                    .crossfade(true).build()
             )
-            val state = imagePainter.state
-
-            AnimatedVisibility(visible = state is AsyncImagePainter.State.Loading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .progressSemantics()
-                        .size(64.dp)
-                )
-            }
-
             AsyncImage(
                 model = imagePainter.request,
-                contentDescription = animeItem.anime_name,
+                contentDescription = animeItem.animeName,
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.baka_loading),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                filterQuality = FilterQuality.None
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -199,39 +168,84 @@ fun CardItemPopular(
 @Composable
 fun OtherCategory(
     navController: NavController,
-    animeItem: AnimeItem,
+    animeItem: AnimeItem = AnimeItem(
+        "むらさめしん", "url", artistHref = null, sourceUrl = null, nameRoute = "Baka"
+    ),
 ) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.clickable {
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(180.dp)
+            .clickable {
                 navController.navigate(NavScreens.DetailScreen.route + "/" + animeItem.nameRoute)
-            }
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(animeItem.url)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = animeItem.anime_name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(76.dp),
-                filterQuality = FilterQuality.Low,
-                placeholder = painterResource(id = R.drawable.baka_loading)
-            )
-            Text(
-                text = "${animeItem.nameRoute}",
-                style = MaterialTheme.typography.titleSmall.copy(
-                    color = White900,
-                    textAlign = TextAlign.Center
+            },
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current).data(animeItem.url).crossfade(true)
+                .build(),
+            contentDescription = animeItem.animeName,
+            contentScale = ContentScale.Crop,
+
+            filterQuality = FilterQuality.Low,
+            placeholder = painterResource(id = R.drawable.baka_loading),
+        )
+
+        Box(
+            contentAlignment = Alignment.BottomStart, modifier = Modifier.background(
+                Brush.verticalGradient(
+                    listOf(Color.Transparent, Color.Black)
                 )
             )
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.surface.copy(0.3f)
+            ) {
+                Box(
+                    modifier = Modifier.padding(vertical = 6.dp, horizontal = 6.dp)
+                ) {
+                    Column() {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(3.dp)
+                        ) {
+                            ItemCircle(Color.Red)
+                            ItemCircle(Color.Yellow)
+                            ItemCircle(Color.Green)
+
+                        }
+
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "${animeItem.nameRoute}",
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            )
+                        )
+                        Text(
+                            text = "Author: ${animeItem.animeName}",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                textAlign = TextAlign.Center, color = Color.White.copy(0.6f)
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
+}
 
+@Composable
+fun ItemCircle(
+    color: Color,
+) {
+    Surface(
+        modifier = Modifier.size(12.dp), shape = CircleShape
+    ) {
+        Box(modifier = Modifier.background(color))
+    }
 }
 
 @Preview(showSystemUi = true)
@@ -239,5 +253,22 @@ fun OtherCategory(
 fun PrevHomeScreen() {
     Wallpaper_anime_appTheme {
         HomeScreen(navController = rememberNavController())
+    }
+}
+
+
+@Preview
+@Composable
+fun PrevOtherCategory() {
+    Wallpaper_anime_appTheme() {
+        OtherCategory(rememberNavController())
+    }
+}
+
+@Preview
+@Composable
+fun PrevOtherCategoryDark() {
+    Wallpaper_anime_appTheme(darkTheme = true) {
+        OtherCategory(rememberNavController())
     }
 }

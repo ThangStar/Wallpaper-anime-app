@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -97,12 +99,11 @@ fun DetailScreenScroll(
             )
         },
         content = { paddingValue: PaddingValues ->
-            Spacer(modifier = Modifier.height(34.dp))
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(62.dp))
             val listItem by detailViewModel.listDetailItem.collectAsState()
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(2),
-                contentPadding = PaddingValues(horizontal = 16.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalItemSpacing = 6.dp,
                 modifier = Modifier.padding(paddingValue)
@@ -124,11 +125,12 @@ fun DetailScreenScroll(
                         if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
                             Box(
                                 contentAlignment = Alignment.Center
-                            ){
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .progressSemantics()
-                                    .size(64.dp))
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .progressSemantics()
+                                        .size(64.dp)
+                                )
                             }
                         }
                         AsyncImage(
@@ -145,10 +147,15 @@ fun DetailScreenScroll(
                                     navController.navigate(NavScreens.PreviewItemScreen.route + "/" + encodedUrl)
                                 },
                             contentScale = ContentScale.Crop,
+                            filterQuality = FilterQuality.None
                         )
                     }
                 }
+                item(span = StaggeredGridItemSpan.FullLine){
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
+
         })
 }
 

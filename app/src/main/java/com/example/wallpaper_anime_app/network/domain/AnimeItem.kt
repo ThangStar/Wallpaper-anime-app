@@ -11,7 +11,7 @@ data class ResultsAnimeItemResponse(
 
 data class AnimeItem(
     @SerializedName("anime_name", alternate = ["artist_name"])
-    val anime_name: String,
+    val animeName: String,
 
     val url: String,
 

@@ -32,8 +32,8 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             // allCategory: tất cả danh mục
             withContext(Dispatchers.IO) {
-                val allCategory = APIHelper.getCategory().collect { array ->
-                    array::class.memberProperties.forEach {
+                APIHelper.getCategory().collect { array ->
+                    array::class.memberProperties.forEach { it ->
                         val typeItem = APIHelper.getItem(it.name)
                         typeItem.collect { it2: ResultsAnimeItemResponse ->
                             it2.listDetailResponse[0].nameRoute = it.name.replaceFirstChar {

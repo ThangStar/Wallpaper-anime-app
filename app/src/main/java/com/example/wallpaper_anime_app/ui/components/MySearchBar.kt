@@ -3,9 +3,7 @@
 package com.example.wallpaper_anime_app.ui.components
 
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -59,14 +57,14 @@ fun MySearchBar(
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search, contentDescription = "search",
-                    tint = MaterialTheme.colorScheme.onSecondary.copy(0.6f)
+                    tint = MaterialTheme.colorScheme.onSurface.copy(0.6f)
                 )
             },
             placeholder = {
                 Text(text = placeholder, style = MaterialTheme.typography.bodyMedium)
             },
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.secondary,
+                containerColor = MaterialTheme.colorScheme.surface,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 placeholderColor = MaterialTheme.colorScheme.onSurface.copy(0.6f)
@@ -84,6 +82,15 @@ fun PrevMySearchBar() {
     }
 }
 
+@Preview
+@Composable
+fun PrevMySearchBarDark() {
+    Wallpaper_anime_appTheme(darkTheme = true) {
+        MySearchBar()
+    }
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
@@ -96,3 +103,4 @@ fun TextBox() {
         }
     }
 }
+

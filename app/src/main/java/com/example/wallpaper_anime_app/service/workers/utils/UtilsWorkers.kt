@@ -45,7 +45,7 @@ fun makeStatusNotification(
             Manifest.permission.POST_NOTIFICATIONS
         ) != PackageManager.PERMISSION_GRANTED
     ) {
-        Toast.makeText(context, "not have permission", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "u not have permission", Toast.LENGTH_SHORT).show()
         return
     }
 }
@@ -57,8 +57,8 @@ fun saveToStorage(
 ) {
     Log.d("SSS", File(url.toPath().name).name)
     val request = DownloadManager.Request(Uri.parse(url))
-        .setTitle("Download")
-        .setDescription("description")
+        .setTitle("Downloading..")
+        .setDescription("downloading image: $url ")
         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         .setDestinationInExternalPublicDir(
             Environment.DIRECTORY_DOWNLOADS,

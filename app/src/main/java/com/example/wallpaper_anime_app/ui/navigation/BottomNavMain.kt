@@ -30,7 +30,7 @@ import com.example.wallpaper_anime_app.ui.screens.HomeScreen
 import com.example.wallpaper_anime_app.ui.screens.PreviewItemScreen
 
 val listBottom = listOf<BottomNavScreen>(
-    BottomNavScreen.HomeScreen, BottomNavScreen.DownloadScreen, BottomNavScreen.ProfileScreen,
+    BottomNavScreen.HomeScreen, BottomNavScreen.DownloadScreen, BottomNavScreen.SettingScreen,
 
     )
 
@@ -82,7 +82,7 @@ fun BottomNavMain(
                 val listPopular by homeViewModel.manyPopular.collectAsState(initial = emptyList())
                 HomeScreen(navController = navController, listPopular = listPopular)
             }
-            composable(BottomNavScreen.ProfileScreen.route) {
+            composable(BottomNavScreen.SettingScreen.route) {
                 HomeScreen(navController = navController)
             }
             composable(BottomNavScreen.DownloadScreen.route) {

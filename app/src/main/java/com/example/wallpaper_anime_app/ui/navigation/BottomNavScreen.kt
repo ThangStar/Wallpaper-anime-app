@@ -8,7 +8,7 @@ sealed class BottomNavScreen
     val icon: Int,
     val route: String,
 ) {
-    object HomeScreen : BottomNavScreen("Home", R.drawable.image, "home_route")
-    object DownloadScreen : BottomNavScreen("Download", R.drawable.download, "download_route")
-    object ProfileScreen : BottomNavScreen("Profile", R.drawable.user, "profile_route")
+    object HomeScreen : BottomNavScreen("Images", R.drawable.image, "home_route")
+    object DownloadScreen : BottomNavScreen("Downloaded", R.drawable.download, "download_route")
+    object SettingScreen : BottomNavScreen("Setting", R.drawable.settings, "setting_route")
 }
